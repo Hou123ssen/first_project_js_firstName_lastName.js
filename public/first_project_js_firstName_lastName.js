@@ -230,6 +230,7 @@ function registerUser(database) {
 
 
 console.log(dataBase)
+console.log(dataBase)
 
 
 // if (PrompetUser === "register") {
