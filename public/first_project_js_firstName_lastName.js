@@ -4,9 +4,34 @@
 let dataBase = []
 
 // * Function ask user your name:
-function chooseAction() {
-    return prompt("Do you want register or login or change password?");
+// function chooseAction() {
+//     return prompt("Do you want register or login or change password?");
+// }
+
+// *  ask user 
+while (true) {
+    let userChoice = prompt(
+        "Choose: register | login | change password | exit"
+    ).toLowerCase().trim();
+
+    if (userChoice === "exit") {
+        alert("Back to main menu");
+        continue;
+    }
+
+    if (userChoice === "register") {
+        registerUser(dataBase);
+        continue;
+    }
+
+    if (userChoice === "login") {
+        login(dataBase);
+        continue;
+    }
+
+    alert("Invalid choice, try again");
 }
+
 
 // * Chack Name user if correct and clean
 function getValidName() {
@@ -216,7 +241,7 @@ function registerUser(database) {
     let password = checkPassword()
     
     let confirmed = confirmPass(password)
-    if(confirmed) return ; 
+    if(!confirmed) return ; 
 
     database.push({
         name : userName,
@@ -230,25 +255,34 @@ function registerUser(database) {
 
 
 console.log(dataBase)
-console.log(dataBase)
 
 
-// if (PrompetUser === "register") {
-    
-//       while(true){
-//           let Yourname = prompt("Your Name")
-//         if (Yourname.length >= 5 && Yourname !== "" && isNaN(Yourname)){
-//             let repairName = Yourname.charAt(0).toLocaleUpperCase() + Yourname.slice(1).trim()
-//             dataBase.push(repairName)
-//             console.log(dataBase)
-//             break
-//         } else {
-//             alert(`Your name ${Yourname}is incomplete`)
-//             continue
-//         }
-//       }
-    
+function login (dataBase){
+    let EMAIL = prompt("enter your email").trim().toLowerCase()
+    let PASSWORD = prompt ('enter your password')
+    let founduser = null
+    // check if in database:
+    for (let i = 0 ; i< dataBase.length ; i++) {
+        if(dataBase[i].email === EMAIL){
+            founduser = dataBase[i]
+            break;
+        }
+    }
+    if(!founduser){
+        alert("email is not found")
+        return
+    }
+    // check password :
+    if(founduser.password !== PASSWORD){
+        alert("password incorrec. try again")
+        return
 
-// }
+    }
+    alert("succesful login")
+}
+
+
+
+
 
 
