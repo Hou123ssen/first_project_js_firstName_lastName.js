@@ -10,23 +10,25 @@ let dataBase = []
 
 // *  ask user 
 while (true) {
-    let userChoice = prompt(
-        "Choose: register | login | change password | exit"
-    ).toLowerCase().trim();
+    let askuser = prompt("Choose: register | login | change password | exit")
 
-    if (userChoice === "exit") {
-        alert("Back to main menu");
-        continue;
+    if (askuser === "exit") {
+        alert("Back to main menu")
+        continue
     }
 
-    if (userChoice === "register") {
-        registerUser(dataBase);
-        continue;
+    if (askuser === "register") {
+        registerUser(dataBase)
+        continue
     }
 
-    if (userChoice === "login") {
+    if (askuser === "login") {
         login(dataBase);
-        continue;
+        continue
+    }
+    if(askuser === "change password"){
+        changePass(dataBase)
+        continue
     }
 
     alert("Invalid choice, try again");
@@ -255,6 +257,41 @@ function registerUser(database) {
 
 
 console.log(dataBase)
+
+// ? change passowrd :
+
+function changePass (database) {
+   let email = prompt("enter your email").trim().toLowerCase()
+   
+   let user = null
+   for(let i = 0 ; i < dataBase.length ; i++){
+    if(dataBase[i].email === email){
+        user = dataBase[i]
+        break;
+    }
+   }
+   if(!user){
+     alert("email not found")
+     
+   }
+
+   let oldPass = prompt("enter your old password")
+   if(user.password !== oldPass ){
+    alert("old password is incorrocet")
+    return
+
+   }
+
+   let newpass = changePass()
+   let isConfirm = confirmPass(newpass)
+   if(!isConfirm) return;
+
+   user.password = newpass
+   alert("passowr changed")
+
+   
+
+}
 
 
 function login (dataBase){
