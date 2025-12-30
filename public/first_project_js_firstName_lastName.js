@@ -1,5 +1,6 @@
 
 
+
 // ^ this DataBase :
 let dataBase = []
 
@@ -23,10 +24,10 @@ while (true) {
     }
 
     if (askuser === "login") {
-        login(dataBase);
+        loginUser(dataBase);
         continue
     }
-    if(askuser === "change password"){
+    if (askuser === "change password") {
         changePass(dataBase)
         continue
     }
@@ -42,16 +43,16 @@ function getValidName() {
     while (true) {
         name = prompt("Enter your full name");
 
-       
+
         let trimmedName = name.trim();
 
-       
+
         if (trimmedName.length < 5) {
             alert("Name must be at least 5 characters");
             continue;
         }
 
-       
+
         let isValid = true;
         // !
         for (let i = 0; i < trimmedName.length; i++) {
@@ -73,71 +74,71 @@ function getValidName() {
             continue;
         }
 
-      
+
         let fixedName =
             trimmedName.charAt(0).toUpperCase() +
             trimmedName.slice(1).toLowerCase();
 
-        return fixedName; 
+        return fixedName;
     }
 }
 
 
 
 // *  if action correct add name in database
-let ActionUser = chooseAction()
-if(ActionUser === "register"){
-    registerUser(dataBase)
-}
+// let ActionUser = chooseAction()
+// if (ActionUser === "register") {
+//     registerUser(dataBase)
+// }
 
 
 
 // Todo Chake email : 
 
-function isCorrectEmail (dataBase) {
-   
-    while(true){
-       let email = prompt("your Email")
-        
+function isCorrectEmail(dataBase) {
+
+    while (true) {
+        let email = prompt("your Email")
+
         let removeSpace = email.trim()
         removeSpace = removeSpace.toLowerCase()
         // check lenght email 
-        if(removeSpace.length < 10){
+        if (removeSpace.length < 10) {
             alert("Your email is not valide")
             continue
         }
         // check espace in email
-        if(removeSpace.includes(" ")){
+        if (removeSpace.includes(" ")) {
             console.log("your emailIt contains a distance")
             continue
         }
         // check number @
         let NumberArobs = 0
-        for(let i = 0 ;i< removeSpace.length ; i++){
-            if(removeSpace[i] === "@"){
-                NumberArobs ++
+        for (let i = 0; i < removeSpace.length; i++) {
+            if (removeSpace[i] === "@") {
+                NumberArobs++
             }
         }
-        if(NumberArobs !== 1){
+        if (NumberArobs !== 1) {
             alert("your email There is more than @")
             continue
         }
-     
+
         let isduplicate = false
-        for(let i = 0 ; i<dataBase.length ; i++ ){
-            if(dataBase[i].email  ===removeSpace){
+        for (let i = 0; i < dataBase.length; i++) {
+            if (dataBase[i].email === removeSpace) {
                 isduplicate = true
                 break
             }
-            
+
         }
-        if(isduplicate){
+        if (isduplicate) {
             alert("this email Pre-registered ")
             continue
         }
         return removeSpace
     }
-    
+
 }
 
 
@@ -148,25 +149,25 @@ function CheckAge() {
     while (true) {
         age = prompt("Enter your age");
 
-        
+
         if (age.includes(" ")) {
             alert("Age must not contain spaces");
             continue;
         }
 
-      
+
         if (age.length === 0) {
             alert("Age cannot be empty");
             continue;
         }
 
-    
+
         if (age.length >= 3) {
             alert("Age must be one or two digits only");
             continue;
         }
 
-        
+
         let isNumber = true;
 
         for (let i = 0; i < age.length; i++) {
@@ -181,7 +182,7 @@ function CheckAge() {
             continue;
         }
 
-        return age; 
+        return age;
     }
 }
 
@@ -193,13 +194,13 @@ function checkPassword() {
     while (true) {
         password = prompt("Enter your password");
 
-        
+
         if (password.includes(" ")) {
             alert("Password must not contain spaces");
             continue;
         }
 
-       
+
         if (password.length < 7) {
             alert("Password must be at least 7 characters");
             continue;
@@ -220,13 +221,13 @@ function checkPassword() {
             continue;
         }
 
-        return password; 
+        return password;
     }
 }
 
-function confirmPass (firstPassword) {
+function confirmPass(firstPassword) {
     let validePass = prompt("confirm your password")
-    if(validePass !== firstPassword ){
+    if (validePass !== firstPassword) {
         alert("your password not match")
         return false;
     }
@@ -241,17 +242,27 @@ function registerUser(database) {
     let email = isCorrectEmail(dataBase)
     let age = CheckAge()
     let password = checkPassword()
-    
+
     let confirmed = confirmPass(password)
-    if(!confirmed) return ; 
+    if (!confirmed) return;
 
     database.push({
-        name : userName,
-        email : email, 
-        age : age,
-        password : password
+        name: userName,
+        email: email,
+        age: age,
+        password: password,
+        balance: 0,
+        history: [],
+        loan: {
+            amount: 0,
+            ramainin: 0
+        },
+        inevstment: {
+            amount: 0,
+            earned: 0
+        }
     })
-    
+
     alert("Registration successful");
 }
 
@@ -260,66 +271,145 @@ console.log(dataBase)
 
 // ? change passowrd :
 
-function changePass (database) {
-   let email = prompt("enter your email").trim().toLowerCase()
-   
-   let user = null
-   for(let i = 0 ; i < dataBase.length ; i++){
-    if(dataBase[i].email === email){
-        user = dataBase[i]
-        break;
-    }
-   }
-   if(!user){
-     alert("email not found")
-     
-   }
+function changePass(database) {
+    let email = prompt("enter your email").trim().toLowerCase()
 
-   let oldPass = prompt("enter your old password")
-   if(user.password !== oldPass ){
-    alert("old password is incorrocet")
-    return
-
-   }
-
-   let newpass = changePass()
-   let isConfirm = confirmPass(newpass)
-   if(!isConfirm) return;
-
-   user.password = newpass
-   alert("passowr changed")
-
-   
-
-}
-
-
-function login (dataBase){
-    let EMAIL = prompt("enter your email").trim().toLowerCase()
-    let PASSWORD = prompt ('enter your password')
-    let founduser = null
-    // check if in database:
-    for (let i = 0 ; i< dataBase.length ; i++) {
-        if(dataBase[i].email === EMAIL){
-            founduser = dataBase[i]
+    let user = null
+    for (let i = 0; i < database.length; i++) {
+        if (database[i].email === email) {
+            user = database[i]
             break;
         }
     }
-    if(!founduser){
-        alert("email is not found")
-        return
+    if (!user) {
+        alert("email not found")
+
     }
-    // check password :
-    if(founduser.password !== PASSWORD){
-        alert("password incorrec. try again")
+
+    let oldPass = prompt("enter your old password")
+    if (user.password !== oldPass) {
+        alert("old password is incorrocet")
         return
 
     }
-    alert("succesful login")
+
+    let newpass = changePass()
+    let isConfirm = confirmPass(newpass)
+    if (!isConfirm) return;
+
+    user.password = newpass
+    alert("passowr changed")
+
+
+
+}
+
+
+// function login(dataBase) {
+//     let EMAIL = prompt("enter your email").trim().toLowerCase()
+//     let PASSWORD = prompt('enter your password')
+//     let founduser = null
+//     // check if in database:
+//     for (let i = 0; i < dataBase.length; i++) {
+//         if (dataBase[i].email === EMAIL) {
+//             founduser = dataBase[i]
+//             break;
+//         }
+//     }
+//     if (!founduser) {
+//         alert("email is not found")
+//         return
+//     }
+//     // check password :
+//     if (founduser.password !== PASSWORD) {
+//         alert("password incorrec. try again")
+//         return
+
+//     }
+//     alert("succesful login")
+// }
+
+
+// =============================BANK======================== //
+function loginUser(database) {
+    let EMAIL = prompt("enter your email")
+    let PASSWORD = prompt("enter you password")
+
+    for (let i = 0; i < database.length; i++) {
+        if (database[i].email === EMAIL && database[i].password === PASSWORD) {
+            alert("login successful")
+            return dataBase[i]
+        }
+    }
+
+    alert("email or password incorrect")
+    return null
 }
 
 
 
+// * menu bank : 
+
+function bankMenu(User) {
+    while (true) {
+        let take = prompt(`welcome ${User.name} your balance : ${User.balance}DH 
+              choose : 
+              1 - logout
+              2 - withdraw
+              3 - deposit
+              4 - take loan
+              5 - inest
+              6 - History
+         `)
+        if (take === "1") {
+            alert("logged out")
+            break;
+        }
+        alert("this sevice is not fond")
+    }
+
+}
+let user = loginUser(dataBase)
+if (user) {
+    bankMenu(user)
+}
 
 
+// * User take money in BANK 
+
+function takeMoney (currentUser) {
+    let howMeny = ''
+    while(true){
+        howMeny = prompt("how much do you want to withraw")
+        let money = Number(howMeny)
+        if(isNaN(money)){
+            alert("Please enter a viled number")
+            continue
+        }
+
+        if(money <= 0){
+            alert("We neen greate than 0 ")
+            continue
+        }
+
+        if(money > currentUser.balance){
+            alert("insufficient balance")
+            continue
+        }
+        
+       currentUser.balance -= money
+       currentUser.history.push(
+          `withdraw : -${money} Dh`
+       )
+       alert("withdraw successful\n " + "new balance:" + currentUser.balance + "DH" )
+       break
+    }
+    
+}
+
+let currentUser = loginUser(dataBase);
+
+if (currentUser !== null) {
+    withdraw(currentUser);
+}
 
